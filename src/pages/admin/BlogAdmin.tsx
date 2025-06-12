@@ -34,9 +34,12 @@ const BlogAdmin = () => {
     const { data, error } = await supabase
       .from("blogs")
       .select("*")
-      .order("published_at", { ascending: false });
-    if (error) setError(error.message);
-    setBlogs(data || []);
+      .order("created_at", { ascending: false });
+    if (error) {
+      setError(error.message);
+    } else {
+      setBlogs(data as BlogPost[]);
+    }
     setLoading(false);
   };
 

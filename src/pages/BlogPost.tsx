@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MainLayout from "../components/layout/MainLayout";
 import { supabase } from "@/integrations/supabase/client";
+// import { Tables } from "@/integrations/supabase/types"; // Assuming you have this types file
+
+// type BlogsTable = Tables<"blogs">; // Define a type for your 'blogs' table
 
 interface BlogPost {
   id: string;
@@ -24,7 +27,7 @@ const BlogPost = () => {
       setError(null);
       try {
         const { data, error } = await supabase
-          .from("blogs")
+          .from("blogs") // No explicit generic type here, rely on client typing
           .select("*")
           .eq("id", id)
           .single();
@@ -32,7 +35,7 @@ const BlogPost = () => {
         if (error) {
           throw error;
         }
-        setPost(data || null);
+        setPost((data as unknown as BlogPost) || null);
       } catch (err: any) {
         console.error("Error fetching post:", err);
         setError(err?.message || "Failed to fetch blog post");
